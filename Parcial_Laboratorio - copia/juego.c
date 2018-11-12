@@ -293,7 +293,7 @@ int ordenarJuego(eJuegos* list, int len)
     printf("  ***  JUEGOS ***\n\n");
     for(int i=0; i<len-1; i++)
     {
-        for(int j=i+1; j<len; j--)
+        for(int j=i+1; j<len; j++)
         {
             if(list[i].importe<list[j].importe)
             {
@@ -315,6 +315,36 @@ int ordenarJuego(eJuegos* list, int len)
     return 0;
 }
 
+
+int ordenarJuego2(eJuegos* list, int len)
+{
+    eJuegos juegos;
+
+    system("cls");
+    printf("  ***  JUEGOS ***\n\n");
+    for(int i=len+1; i=0; i--)
+    {
+        for(int j>len-1; j=0; j--)
+        {
+            if(list[i].importe<list[j].importe)
+            {
+                juegos = list[i];
+                list[i] = list[j];
+                list[j] = juegos;
+            }
+
+            else if(list[i].importe == list[j].importe && strcmp(list[j].descripcion,list[i].descripcion)>0)
+            {
+                juegos = list[i];
+                list[i] = list[j];
+                list[j] = juegos;
+            }
+        }
+    }
+    mostrarJuegos(list, len);
+
+    return 0;
+}
 void harcodearJuegos(eJuegos y[])
 {
     eJuegos x[]=
