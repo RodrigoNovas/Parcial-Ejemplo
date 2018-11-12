@@ -264,7 +264,7 @@ int borrarJuego(eJuegos list[], int len)
     {
         mostrarJuego(list[found]);
 
-        getValidString("¿Esta seguro de que quiere dar de baja a este juego? s/n\n",&borrar,1,1);
+        getValidString("Â¿Esta seguro de que quiere dar de baja a este juego? s/n\n",&borrar,1,1);
 
         if(borrar=='s')
         {
@@ -293,7 +293,7 @@ int ordenarJuego(eJuegos* list, int len)
     printf("  ***  JUEGOS ***\n\n");
     for(int i=0; i<len-1; i++)
     {
-        for(int j=i+1; j<len; j++)
+        for(int j=i+1; j<len; j--)
         {
             if(list[i].importe<list[j].importe)
             {
