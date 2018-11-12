@@ -255,7 +255,7 @@ int menuListar(eCliente cliente[], int lenCli, eJuegos juego[], int lenJue, eAlq
 }
 ///-------------------------------------------------------------------------------------------------------
 ///ORDENAR ALQUILERES POR CLIENTE
-void ordenarAlquileresXCliente(eAlquileres* alquileres, int lenAl, eJuegos* juegos, int lenJueg, eCliente* clientes, int lenCli)
+void ordenarAlquileresXCliente(eAlquileres* alquileres, int lenAl, eJuegos* juegos, int lenJueg, eCliente* cliente, int lenCli)
 {
     char nombreI[51];
     char nombreJ[51];
@@ -285,6 +285,149 @@ void ordenarAlquileresXCliente(eAlquileres* alquileres, int lenAl, eJuegos* jueg
     }
 }
 
+float juegoTotal(eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli) {
+    int i, j;
+    float total = 0;
+    for (i = 0; i < lenJueg; i++) {
+        if (juegos[i].isEmpty == 0)
+            for (j = 0; j < lenJueg * lenCli; j++) {
+                if (alquileres[j].isEmpty == 0 && alquileres[j].idJuegos == juegos[i].idJuegos) {
+                    total += juegos[i].importe;
+                }
+            }
+    }
+    return total;
+}
+
+/**
+ * Calcula el importe promedio de los juegos calculados
+ * @param alquileres Pointer to alquileres struct
+ * @param juegos Pointer to juegos struct
+ * @param clientes Pointer to clientes struct
+ * @param lenJuegos int size juegos
+ * @param lenClientes int size clientes
+ * @return total/cantidad float
+ */
+float promedio(eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli) {
+    int i;
+    int j;
+    int k;
+    float total = 0;
+    int cantidad = 0;
+
+    for (i = 0; i < lenJueg; i++) {
+        if (juegos[i].isEmpty == 0)
+            for (j = 0; j < lenJueg * lenCli; j++) {
+                if (alquileres[j].isEmpty == 0 && alquileres[j].idJuegos == juegos[i].idJuegos) {
+                    total += juegos[i].importe;
+                    cantidad++;
+                }
+            }
+    }
+    return total / cantidad;
+}
+
+/**
+ * Muestra los importes que no superan el promedio.
+ * @param alquileres Pointer to alquileres struct
+ * @param juegos Pointer to juegos struct
+ * @param clientes Pointer to clientes struct
+ * @param lenJuegos int size juegos
+ * @param lenClientes int size clientes
+ * @return total int
+ */
+int NoPromedio(eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli) {
+    int i, total = 0;
+    float promedio = promedio(alquileres, juegos, cliente, lenJueg, lenCli);
+    for (i = 0; i < lenJueg; i++) {
+        if (juegos[i].importe < promedio && juegos[i].isEmpty == 0) {
+            total++;
+        }
+    }
+    return total;
+}
+/**
+ * Muestra el/los alquileres de un juego determinado por la fecha que recibe como parametro
+ *
+ * @param idJuego int
+ * @param alquileres Pointer to alquileres struct
+ * @param juegos Pointer to juegos struct
+ * @param clientes Pointer to clientes struct
+ * @param lenJuegos int size juegos
+ * @param lenClientes int size clientes
+ */
+void alquilerDeUnJuegoDeterminado(int idJuegos, eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli ) {
+    int i;
+    int j;
+    int k;
+    for (i = 0; i < lenCli; i++) {
+        if (cliente[i].isEmpty == 0)
+            for (k = 0; k < lenCli * lenJueg; k++) {
+                if (alquileres[k].isEmpty == 0 && alquileres[k].idJuegos == idJuegos &&
+                    cliente[i].idCliente == alquileres[k].idCliente) {
+                    printf("------------------------------------------------------------\n");
+                    printf("| ID        |    %d\n", clientes[i].idCliente);
+                    printf("| Nombre    |    %s\n", clientes[i].nombre);
+                    printf("| Apellido  |    %s\n", clientes[i].apellido);
+                    printf("| Domicilio |    %s\n", clientes[i].domicilio);
+                    printf("------------------------------------------------------------\n");
+
+                }
+
+            }
+    }
+}
+/**
+ * Muestra el/los alquileres de un cliente determinado por la fecha que recibe como parametro
+ *
+ * @param idCliente int
+ * @param alquileres Pointer to alquileres struct
+ * @param juegos Pointer to juegos struct
+ * @param clientes Pointer to clientes struct
+ * @param lenJuegos int size juegos
+ * @param lenClientes int size clientes
+ */
+
+void alquilerDeUnClienteDeterminado(int idCliente, eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli) {
+    int i;
+    int j;
+    int k;
+    for (i = 0; i < lenJuegos; i++) {
+        if (juegos[i].isEmpty == 0)
+            for (k = 0; k < lenCli * lenJueg; k++) {
+                if (alquileres[k].isEmpty == 0 && alquileres[k].idCliente == idCliente &&
+                    juegos[i].idJuegos == alquileres[k].idJuegos) {
+                    printf("------------------------------------------------------------\n");
+                    printf("| ID           |    %d\n", juegos[i].idJuegos);
+                    printf("| Descripcion  |    %s\n", juegos[i].descripcion);
+                    printf("| Importe      |    %f\n", juegos[i].importe);
+                    printf("------------------------------------------------------------\n");
+
+                }
+
+            }
+    }
+}
+void fechaAlquileresClien (int dia, int mes, int anio, eAlquileres* alquileres, eJuegos* juegos, eCliente* cliente, int lenJueg, int lenCli) {
+    int i, j, k;
+    for (i = 0; i < lenClientes; i++) {
+        if (clientes[i].isEmpty == 0)
+            for (k = 0; k < lenCli * lenJueg; k++) {
+                if (alquileres[k].isEmpty == 0 && alquileres[k].idCliente == clientes[i].idCliente &&
+                    alquileres[k].fecha.dia == dia && alquileres[k].fecha.mes == mes &&
+                    alquileres[k].fecha.anio == anio) {
+                    printf("------------------------------------------------------------\n");
+                    printf("| ID           |    %d\n", cliente[i].idCliente);
+                    printf("| Nombre       |    %s\n", cliente[i].nombre);
+                    printf("| Apellido     |    %s\n", cliente[i].apellido);
+                    printf("| Domicilio    |    %s\n", cliente[i].domicilio);
+                    printf("------------------------------------------------------------\n");
+
+                }
+
+            }
+    }
+}
 void hardcodeoAlquiler(eAlquileres y[])
 {
     eAlquileres x[]=
